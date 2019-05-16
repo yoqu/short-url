@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<body>
+<div class="container">
+    <h1>短链生成</h1>
+    <form role="form">
+        <div class="form-group">
+            <label for="longUrl">长链</label>
+            <input type="text" class="form-control" id="longUrl" placeholder="请输入名称">
+        </div>
+        <div class="form-group">
+            <label for="customShort">自定义短链</label>
+            <select name="customShort" id="customShort" class="form-group">
+                <option value="0" selected>否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+        <div class="form-group" style="display: none;" id="shortDiv">
+            <label for="shortCode">短链</label>
+            <input type="text" class="form-control" id="shortCode" placeholder="请输入名称">
+        </div>
+        <button type="button" id="short-btn" class="btn btn-primary">生成短链</button>
+    </form>
+    <div class="alert alert-success" role="alert" id="alert-msg" style="display: none;"></div>
+    <a href="/rank.html">查看统计</a>
+</div>
+
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script type="application/javascript">
+    $(function () {
+        $("#short-btn").click(function () {
+            var longUrl = $("#longUrl").val();
+            if (longUrl == "") {
+                alert('请输入长链');
+                return;
+            }
+            var shortCode = "";
+            if ($("#customShort").val() == "1") {
+                shortCode = $("#shortCode").val();
+                if (shortCode == "") {
+                    alert('请输入短链');
+                    return;
+                }
+            }
+            $.ajax({
+                url: '/generate',
+                data: {
+                    longUrl: longUrl,
+                    shortCode: shortCode
+                },
+                method: 'get',
+                success: function (r) {
+                    if (r.slice(0, 3) == 'suc') {
+                        var result = r.slice(4);
+                        $("#alert-msg").html('生成成功： <a href="' + result + '">' + result + '</a>');
+                        $("#alert-msg").show();
+                    } else {
+                        alert(r.slice(6));
+                        return;
+                    }
+
+                },
+                error: function (err) {
+
+                }
+            })
+        })
+        $("#customShort").change(function () {
+            var v = $("#customShort").val();
+            if (v == 1) {
+                $("#shortDiv").show();
+            } else {
+                $("#shortDiv").hide();
+            }
+        });
+    })
+</script>
+</html>
