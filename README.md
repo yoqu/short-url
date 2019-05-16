@@ -22,10 +22,10 @@
 
 # 技术选型
 
-- [x] java
-- [x] spring boot
-- [x] redis
-- [x] spring mvc
+- java
+- spring boot
+- redis
+- spring mvc
 
 
 
