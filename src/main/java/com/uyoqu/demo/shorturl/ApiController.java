@@ -41,7 +41,7 @@ public class ApiController {
             char[] codeChars = new char[config.getLength()];
             for (int j = 0; j < config.getLength(); j++) {
                 //3. 把截断的md5值转换为16进制数据并从字符集中取余得到字符下标索引
-                Long index = Long.parseLong(md5.substring(i, i + size >= md5.length() ? md5.length() : i + size), 16) % Integer.valueOf(charData.length).longValue();
+                Long index = Math.floorMod(Long.parseLong(md5.substring(i, i + size >= md5.length() ? md5.length() : i + size), 16), Integer.valueOf(charData.length).longValue());
                 i = i + size;
                 codeChars[j] = charData[index.intValue()];
             }
