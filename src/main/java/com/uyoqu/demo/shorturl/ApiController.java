@@ -1,5 +1,6 @@
 package com.uyoqu.demo.shorturl;
 
+import cn.hutool.core.util.ReUtil;
 import com.uyoqu.demo.shorturl.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
@@ -29,6 +30,9 @@ public class ApiController {
     public String generate(String longUrl, @RequestParam(required = false, name = "shortCode") String shortCode) {
         if (StringUtils.isEmpty(longUrl)) {
             return "error:长连接不能为空";
+        }
+        if (!ReUtil.contains("[a-zA-z]+://[^\\s]*", longUrl)) {
+            return "error:地址格式错误";
         }
         char[] charData = config.getCharsetData().toCharArray();
         String md5 = Md5Utils.to32LowerCase(longUrl);
